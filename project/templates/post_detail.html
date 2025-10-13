@@ -1,0 +1,53 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+Пост
+{% endblock title %}
+
+
+{% block content %}
+<table>
+    <thead>
+    <tr>
+        <th>Автор</th>
+        <th>Дата публикации</th>
+        <th>Заголовок</th>
+        <th>Текст</th>
+        {% if perms.NewsPortal.change_post %}
+        <th>Редактировать</th>
+        {% endif %}
+        {% if perms.NewsPortal.delete_post %}
+        <th>Удалить</th>
+        {% endif %}
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{ post.author.user.username }}</td>
+        <td>{{ post.datetime|date:'d M Y' }}</td>
+        <td>{{ post.title }}</td>
+        <td>{{ post.text|censor}}</td>
+        {% if perms.NewsPortal.change_post %}
+        <td>
+            {% if post.positions == "НВ" %}
+            <a href="{% url 'news_update' post.id %}">изменить</a>
+            {% else %}
+            <a href="{% url 'articles_update' post.id %}">изменить</a>
+            {% endif %}
+        </td>
+        {% endif %}
+        {% if perms.NewsPortal.delete_post %}
+        <td>
+            {% if post.positions == "НВ" %}
+            <a href="{% url 'news_delete' post.id %}">изменить</a>
+            {% else %}
+            <a href="{% url 'articles_delete' post.id %}">изменить</a>
+            {% endif %}
+        </td>
+        {% endif %}
+    </tr>
+    </tbody>
+</table>
+{% endblock content %}

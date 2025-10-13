@@ -1,0 +1,14 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+{% block title %}
+{{ create_or_update }}
+{% endblock title %}
+
+{% block content %}
+   <h1>{{ create_or_update }}</h1>
+   <form action="" method="post">
+       {% csrf_token %}
+       {{ form.as_p }}
+       <input type="submit" value="Применить" />
+   </form>
+{% endblock content %}

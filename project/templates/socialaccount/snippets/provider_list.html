@@ -1,0 +1,23 @@
+{% load socialaccount %}
+
+<div class="social-login-buttons text-center">
+    {% for provider in socialaccount_providers %}
+    <a href="{% provider_login_url provider.id process=process %}"
+       style="width: 200px"
+       class="btn btn-sm md-2 py-2 px-4 d-inline-block align-items-center justify-content-center
+              {% if provider.id == 'google' %} btn-outline-danger
+              {% elif provider.id == 'yandex' %} btn-outline-dark
+              {% else %} btn-secondary
+              {% endif %}"
+    >
+        {% if provider.id == "google" %}
+        <i class="fa-brands fa-google"></i> Войти через Google
+        {% elif provider.id == "yandex" %}
+        <i class="fa-brands fa-yandex"></i> Войти через Яндекс
+        {% else %}
+        Войти через {{ provider.name }}
+        {% endif %}
+    </a>
+    <br>
+    {% endfor %}
+</div>
