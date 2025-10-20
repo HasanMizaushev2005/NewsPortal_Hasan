@@ -4,11 +4,17 @@
 {% endblock title %}
 
 {% block content %}
-
-<div class="container mt-5 d-flex justify-content-center">
-    <div class="shadow-lg border-0 rounded-4 p-4 text-center" style="width: 100%; max-width: 600px">
-        <h1>❌ Доступ ограничен!</h1>
+<!--    {% if perms.NewsPortal.add_post %}-->
+<!--    <div class="container mt-5 d-flex justify-content-center">-->
+<!--        <div class="shadow-lg border-0 rounded-4 p-4 text-center" style="width: 100%; max-width: 600px">-->
+<!--            <h1>❌ Вы не можете создавать больше 3 постов в сутки!</h1>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    {% else %}-->
+    <div class="container mt-5 d-flex justify-content-center">
+        <div class="shadow-lg border-0 rounded-4 p-4 text-center" style="width: 100%; max-width: 600px">
+            <h1>❌ Доступ ограничен!</h1>
+        </div>
     </div>
-</div>
-
+<!--    {% endif %}-->
 {% endblock content %}

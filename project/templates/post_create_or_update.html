@@ -5,10 +5,18 @@
 {% endblock title %}
 
 {% block content %}
-   <h1>{{ create_or_update }}</h1>
-   <form action="" method="post">
-       {% csrf_token %}
-       {{ form.as_p }}
-       <input type="submit" value="Применить" />
-   </form>
+    {% if posts_limit or 'update' in request.path %}
+        <h1>{{ create_or_update }}</h1>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Применить"/>
+        </form>
+    {% else %}
+        <div class="container mt-5 d-flex justify-content-center">
+            <div class="shadow-lg border-0 rounded-4 p-4 text-center" style="width: 100%; max-width: 600px">
+                <h1>❌ Вы не можете создавать больше 3 постов в сутки!</h1>
+            </div>
+        </div>
+    {% endif %}
 {% endblock content %}
