@@ -7,6 +7,8 @@ from django.utils import timezone
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.core.cache import cache
+from django.utils.http import urlencode
 
 from .forms import PostForm
 from .models import Post, Category
@@ -20,12 +22,29 @@ class PostListView(ListView):
     template_name = 'post_list.html'
     context_object_name = 'posts'
     paginate_by = 10
+    cache_timeout = 120
 
+    def get_queryset(self):
+        params = self.request.GET.dict()
+        cache_key = f'post-queryset-{urlencode(params)}' if params else 'post-queryset'
+        queryset = cache.get(cache_key)
+        if queryset is None:
+            queryset = super().get_queryset()
+            cache.set(cache_key, queryset, self.cache_timeout)
+        return queryset
 
 class PostDetailView(DetailView):
     model = Post
     template_name = 'post_detail.html'
     context_object_name = 'post'
+    cache_timeout = 120
+
+    def get_object(self, *args, **kwargs):
+        obj = cache.get(f'post-{self.kwargs["pk"]}')
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'post-{self.kwargs["pk"]}', obj)
+        return obj
 
 
 class PostSearchView(FilterView):

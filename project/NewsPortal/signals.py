@@ -1,10 +1,17 @@
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.dispatch import receiver
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import m2m_changed, post_save, post_delete
+from django.core.cache import cache
 
 from .models import Category, Post
 from .tasks import subscribers_notification_task, new_post_notification_task
+
+
+@receiver([post_save, post_delete], sender=Post)
+def new_post_notification(sender, instance, *args, **kwargs):
+    cache.delete(f'post-{instance.pk}')
+    cache.delete_pattern('post-queryset*')
 
 
 @receiver(m2m_changed, sender=Post.category.through)
